@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Game of Life</title>
+    <style>
+        body {
+            margin: 0;
+            background: #111;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        canvas {
+            border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="grid"></canvas>
+
+<script>
+    const canvas = document.getElementById("grid");
+    const ctx = canvas.getContext("2d");
+
+    const CELL_SIZE = 10;
+    const WS_URL = "ws://localhost:8000/ws";
+
+    const ws = new WebSocket(WS_URL);
+
+    ws.onopen = () => {
+        console.log("WebSocket connected");
+    };
+
+    ws.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        drawGrid(data.grid);
+    };
+
+    ws.onerror = (e) => {
+        console.error("WebSocket error:", e);
+    };
+
+    function drawGrid(grid) {
+        const rows = grid.length;
+        const cols = grid[0].length;
+
+        canvas.width = cols * CELL_SIZE;
+        canvas.height = rows * CELL_SIZE;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let y = 0; y < rows; y++) {
+            for (let x = 0; x < cols; x++) {
+                if (grid[y][x]) {
+                    ctx.fillStyle = "#ffffff";
+                    ctx.fillRect(
+                        x * CELL_SIZE,
+                        y * CELL_SIZE,
+                        CELL_SIZE,
+                        CELL_SIZE
+                    );
+                }
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
