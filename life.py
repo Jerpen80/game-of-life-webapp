@@ -15,9 +15,9 @@ def count_live_neighbor_cells(grid, x, y, grid_width, grid_height):
         for dx in (-1, 0, 1):
             if dx == 0 and dy == 0:
                 continue
-            nx, ny = x + dx, y + dy
-            if 0 <= nx < grid_width and 0 <= ny < grid_height:
-                count += grid[ny][nx]
+            # Wrap coordinates so the grid behaves like a torus (endless edges)
+            nx, ny = (x + dx) % grid_width, (y + dy) % grid_height
+            count += grid[ny][nx]
     return count
 
 def step(grid):

@@ -5,7 +5,7 @@ from life import make_grid, populate_grid_random, step
 
 app = FastAPI()
 
-grid = make_grid(40, 30)
+grid = make_grid(100, 60)
 populate_grid_random(grid, 0.2)
 
 
