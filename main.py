@@ -1,36 +1,25 @@
-import random
+from fastapi import FastAPI, WebSocket
+from fastapi.responses import HTMLResponse
+import asyncio
+from life import make_grid, populate_grid_random, step
 
-def make_grid(width, height):
-    return [[0 for _ in range(width)] for _ in range(height)]
+app = FastAPI()
 
-def populate_grid_random(grid, density):
-    for y in range(len(grid)):
-        for x in range(len(grid[0])):
-            if random.random() < density:
-                grid[y][x] = 1
+grid = make_grid(100, 60)
+populate_grid_random(grid, 0.2)
 
-def count_live_neighbor_cells(grid, x, y, grid_width, grid_height):
-    count = 0
-    for dy in (-1, 0, 1):
-        for dx in (-1, 0, 1):
-            if dx == 0 and dy == 0:
-                continue
-            # Wrap coordinates so the grid behaves like a torus (endless edges)
-            nx, ny = (x + dx) % grid_width, (y + dy) % grid_height
-            count += grid[ny][nx]
-    return count
 
-def step(grid):
-    height = len(grid)
-    width = len(grid[0])
-    new_grid = make_grid(width, height)
+@app.get("/")
+def index():
+    return HTMLResponse(open("web/index.html").read())
 
-    for y in range(height):
-        for x in range(width):
-            n = count_live_neighbor_cells(grid, x, y, width, height)
-            if grid[y][x] == 1 and n in (2, 3):
-                new_grid[y][x] = 1
-            elif grid[y][x] == 0 and n == 3:
-                new_grid[y][x] = 1
 
-    return new_grid
+@app.websocket("/ws")
+async def ws(ws: WebSocket):
+    await ws.accept()
+
+    global grid
+    while True:
+        grid = step(grid)
+        await ws.send_json({"grid": grid})
+        await asyncio.sleep(0.2)
