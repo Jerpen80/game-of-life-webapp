@@ -1,9 +1,12 @@
+from pathlib import Path
+
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import HTMLResponse
 import asyncio
 from life import make_grid, populate_grid_random, step
 
 app = FastAPI()
+WEB_DIR = Path(__file__).resolve().parent / "web"
 
 grid = make_grid(100, 60)
 populate_grid_random(grid, 0.2)
@@ -11,7 +14,7 @@ populate_grid_random(grid, 0.2)
 
 @app.get("/")
 def index():
-    return HTMLResponse(open("web/index.html").read())
+    return HTMLResponse((WEB_DIR / "index.html").read_text(encoding="utf-8"))
 
 
 @app.websocket("/ws")

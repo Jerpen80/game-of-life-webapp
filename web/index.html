@@ -27,7 +27,8 @@
     const ctx = canvas.getContext("2d");
 
     const CELL_SIZE = 10;
-    const WS_URL = "ws://localhost:8000/ws";
+    const WS_PROTOCOL = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const WS_URL = `${WS_PROTOCOL}//${window.location.host}/ws`;
 
     const ws = new WebSocket(WS_URL);
 
