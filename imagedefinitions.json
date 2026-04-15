@@ -1,6 +1,6 @@
 [
   {
     "name": "life-app",
-    "imageUri": "489947827123.dkr.ecr.eu-central-1.amazonaws.com/life-app:abc1234"
+    "imageUri": "489947827123.dkr.ecr.eu-central-1.amazonaws.com/life-app:latest"
   }
 ]
