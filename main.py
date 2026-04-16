@@ -8,7 +8,7 @@ from life import make_grid, populate_grid_random, step
 app = FastAPI()
 WEB_DIR = Path(__file__).resolve().parent / "web"
 
-grid = make_grid(100, 60)
+grid = make_grid(120, 80)
 populate_grid_random(grid, 0.2)
 
 
