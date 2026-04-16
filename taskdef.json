@@ -1,0 +1,24 @@
+{
+    "executionRoleArn": "arn:aws:iam::489947827123:role/ecsTaskExecutionRole",
+    "containerDefinitions": [
+        {
+            "name": "life-app",
+            "image": "<IMAGE>",
+            "essential": true,
+            "portMappings": [
+                {
+                    "hostPort": 8000,
+                    "protocol": "tcp",
+                    "containerPort": 8000
+                }
+            ]
+        }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "networkMode": "awsvpc",
+    "cpu": "256",
+    "memory": "512",
+    "family": "game-of-life"
+}
